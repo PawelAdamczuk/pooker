@@ -20,6 +20,7 @@ public:
     bool isShuffled() const;
     void shuffle();
     friend std::ostream &operator<<(std::ostream &os, const CardDeck &deck);
+    Card deal();
 };
 
 

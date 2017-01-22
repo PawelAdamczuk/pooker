@@ -26,6 +26,9 @@ public:
     short compare(const Card& a);
     bool operator <(const Card &b) const;
     bool operator >(const Card &b) const;
+    std::string getRankString() const;
+    bool operator==(const Card &rhs) const;
+    bool operator!=(const Card &rhs) const;
 };
 
 

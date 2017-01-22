@@ -31,4 +31,10 @@ std::ostream &operator<<(std::ostream &os, const CardDeck &deck) {
     return os;    
 }
 
+Card CardDeck::deal() {
+    Card temp = this->cards.back();
+    this->cards.pop_back();
+    return temp;
+}
+
 

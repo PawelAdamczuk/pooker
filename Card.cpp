@@ -27,15 +27,11 @@ ranks_t Card::getRank() const {
 
 //only compares ranks
 bool Card::operator<(const Card &b) const {
-    if(this->rank < b.rank)
-        return true;
-    return false;
+    return this->rank < b.rank;
 }
 //only compares ranks
 bool Card::operator>(const Card &b) const {
-    if(this->rank > b.rank)
-        return true;
-    return false;
+    return this->rank > b.rank;
 }
 
 //takes the suit into account (used in sorting that needs to be deterministic)
@@ -51,4 +47,19 @@ short Card::compare(const Card &a) {
         return -1;
 
     return 0;
+}
+
+std::string Card::getRankString() const {
+    std::string Ranks[] = {"incorrect_rank", "incorrect_rank", "two", "three", "four", "five", "six", "seven",
+                           "eight", "nine", "ten", "jack", "queen", "king", "ace"};
+    return Ranks[this->rank];
+}
+
+bool Card::operator==(const Card &rhs) const {
+    return suit == rhs.suit &&
+           rank == rhs.rank;
+}
+
+bool Card::operator!=(const Card &rhs) const {
+    return !(rhs == *this);
 }
