@@ -6,10 +6,10 @@
 
 std::ostream &operator<<(std::ostream &stream, const Card &card) {
     //http://stackoverflow.com/questions/3342726/c-print-out-enum-value-as-text
-    char *Ranks[] = {"incorrect_rank", "incorrect_rank", "two", "three", "four", "five", "six", "seven",
+    std::string Ranks[] = {"incorrect_rank", "incorrect_rank", "two", "three", "four", "five", "six", "seven",
                     "eight", "nine", "ten", "jack", "queen", "king", "ace"};
 
-    char *Suits[] = {"spades", "hearts", "diamonds", "clubs"};
+    std::string Suits[] = {"spades", "hearts", "diamonds", "clubs"};
 
     stream << Ranks[card.rank] << " of " << Suits[card.suit];
     return stream;

@@ -18,6 +18,7 @@ private:
     ranks_t rank;
 
 public:
+    Card() : Card(ace, spades){};
     Card(ranks_t rank, suits_t suit);
     suits_t getSuit() const;
     ranks_t getRank() const;
