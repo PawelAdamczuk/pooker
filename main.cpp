@@ -58,6 +58,31 @@ void test_Hand_2() {
     std::cout << "hand 2 stronger: " << (hand1 < hand2) << std::endl;
 }
 
+void test_Hand_3() {
+    CardDeck cd;
+    cd.shuffle();
+    std::vector<Card> card_set;
+    for (int i = 0; i < 6; ++i) {
+        card_set.push_back(cd.deal());
+    }
+
+    std::vector<Hand> hands = Hand::evaluate(card_set);
+
+    std::cout << "cards:" << std::endl;
+
+    for (int i = 0; i < 6; ++i) {
+        std::cout << card_set[i] << std::endl;
+    }
+
+    std::sort(hands.begin(), hands.end());
+
+    std::cout << "" << std::endl;
+
+    for (int j = 0; j < hands.size(); ++j) {
+        std::cout << hands[j] << std::endl;
+    }
+}
+
 void test_CardDeck_deal() {
     CardDeck cd;
     cd.shuffle();
@@ -75,6 +100,7 @@ int main() {
 //    test_CardDeck_1();
 //    test_CardDeck_deal();
 //    test_Hand_1();
-    test_Hand_2();
+//    test_Hand_2();
+    test_Hand_3();
     return 0;
 }

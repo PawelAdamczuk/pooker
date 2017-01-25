@@ -17,6 +17,11 @@ std::ostream &operator<<(std::ostream &stream, const Card &card) {
 
 Card::Card(ranks_t rank, suits_t suit) : suit(suit), rank(rank) {}
 
+Card::Card(const Card &obj) {
+    this->suit = obj.suit;
+    this->rank = obj.rank;
+}
+
 suits_t Card::getSuit() const {
     return suit;
 }

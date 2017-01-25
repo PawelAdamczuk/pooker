@@ -10,6 +10,7 @@ enum hand_rankings_t{high_card = 0, pair, two_pair, three_of_a_kind, straight, f
 #include "Card.h"
 #include <algorithm>
 #include <ostream>
+#include <vector>
 
 class Hand {
 private:
@@ -35,6 +36,8 @@ public:
     bool operator<(const Hand &rhs) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Hand &hand);
+
+    static std::vector<Hand> evaluate(std::vector<Card> &cards);
 
 };
 

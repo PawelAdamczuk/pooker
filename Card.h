@@ -19,6 +19,7 @@ private:
 
 public:
     Card() : Card(ace, spades){};
+    Card(const Card &obj);
     Card(ranks_t rank, suits_t suit);
     suits_t getSuit() const;
     ranks_t getRank() const;

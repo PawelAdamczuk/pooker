@@ -219,7 +219,8 @@ bool Hand::CheckRoyalFlush() {
 
 Hand::Hand(Card *_cards, int _size) {
     for (int i = 0; i < 5; ++i) {
-        this->cards[i] = _cards[i];
+        Card newCard(_cards[i]);
+        this->cards[i] = newCard;
     }
 
     std::sort(this->cards, this->cards + 5);
@@ -331,8 +332,46 @@ bool Hand::operator<(const Hand &rhs) const {
         case royal_flush:
             return false;
     }
+    return true;
+}
 
+std::vector<Hand> Hand::evaluate(std::vector<Card> &cards) {
+    unsigned int set_size = (unsigned int) cards.size();
+    unsigned int pow_set_size = (unsigned int) pow(2, set_size);
+    std::vector<Hand> hands;
 
+    if(set_size < 5)
+        return hands;
 
+    if(set_size == 5){
+        Card handCards[5];
+        for (int i = 0; i < 5; ++i) {
+            Card newCard(cards[i]);
+            handCards[i] = newCard;
+        }
+        Hand newHand(handCards, 5);
+        hands.push_back(newHand);
+    }
 
+    for (int counter = 0; counter < pow_set_size; ++counter) {
+        int subset_size = 0;
+        for (int j = 0; j < set_size; ++j) {
+            if(counter & (1<<j))
+                subset_size++;
+        }
+
+        if(subset_size == 5) {
+            Card handCards[5];
+            int handCardsIndex = 0;
+            for (int j = 0; j < set_size; ++j) {
+                if(counter & (1<<j)) {
+                    Card newCard(cards[j]);
+                    handCards[handCardsIndex++] = newCard;
+                }
+            }
+            Hand newHand(handCards, 5);
+            hands.push_back(newHand);
+        }
+    }
+    return hands;
 }
