@@ -2,6 +2,7 @@
 // Created by pawel on 22.01.17.
 //
 
+#include <random>
 #include "CardDeck.h"
 
 CardDeck::CardDeck() {

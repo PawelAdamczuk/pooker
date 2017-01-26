@@ -3,6 +3,7 @@
 //
 
 #include "Hand.h"
+#include "cmath"
 
 //id_card_1 := the hightest card
 bool Hand::CheckHighCard() {
