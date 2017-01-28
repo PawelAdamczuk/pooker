@@ -8,12 +8,24 @@
 
 #include "Card.h"
 
+enum PlayerStatus {
+    pleb, dealer, smallBlind, bigBlind
+};
+
 class Player {
 
 public:
-    bool operator ==(const Player &b) const;
-    bool operator <(const Player &b) const;
+    bool operator==(const Player &b) const;
+
+    bool operator<(const Player &b) const;
+
     void addCard(Card card);
+
+    PlayerStatus getStatus();
+
+    int call(int, bool canRaise);
+
+    void subtractChips(int);
 };
 
 

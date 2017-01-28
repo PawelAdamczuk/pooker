@@ -25,7 +25,7 @@ private:
     RoundPhase phase;
     int bestBet;
     int betsSum;
-    int smallBlind;
+    int blind;
     int pot;
 
 
@@ -52,6 +52,27 @@ private:
     std::vector<Player> getWinners();
 
     void playPreflop();
+
+    void addCardToTable();
+
+
+    void addPlayersBet(Player &player, int amount);
+
+    void removePlayer(Player p);
+
+    void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
+
+    void cycleToEqualizeBets(CyclicIterator it);
+
+    bool playerBetIsEqual(Player p);
+
+    int getPlayerBets(Player p);
+
+    bool betsAreEqualized();
+
+    int getPlayerBetToCall(Player p);
+
+    void roundOfBetting(CyclicIterator it);
 };
 
 
