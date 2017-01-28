@@ -8,7 +8,6 @@ set(SOURCE_FILES
         Card.cpp Card.h
         CardDeck.cpp CardDeck.h
         Hand.cpp Hand.h
-        Presenter.cpp Presenter.h
         GameRound.cpp GameRound.h
         Player.cpp Player.h
         )

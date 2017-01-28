@@ -4,76 +4,103 @@
 
 #ifndef POOKER_ABSTRACTROUND_H
 #define POOKER_ABSTRACTROUND_H
+
 #include "Player.h"
 #include "vector"
 #include "map"
 #include "Card.h"
-#include "Presenter.h"
 #include "CardDeck.h"
 
-enum RoundPhase{preflop= 0, flop, turn, river};
+enum RoundPhase {
+    preflop = 0, flop, turn, river
+};
+
+template<class T>
+class CyclicIterator {
+private:
+    std::vector<T> vec;
+    typename std::vector<T>::iterator it;
+
+public:
+    CyclicIterator(std::vector<T> vec) : vec(vec), it(vec.begin()) {}
+
+    CyclicIterator& operator++() {
+        it++;
+        if (isEnd()) {
+            it = vec.begin();
+        }
+        return *this;
+    }
+
+    CyclicIterator& operator--() {
+        it++;
+        if (isEnd()) {
+            it = vec.begin();
+        }
+        return *this;
+    }
+
+    bool isEnd() {
+        return it == vec.end();
+    }
+
+    T &operator*() {
+        return *it;
+    }
+};
 
 class GameRound {
 private:
     std::vector<Player> players;
-    Presenter presenter;
-    std::map<Player,int> bets;
+    std::map<Player, int> bets;
     std::vector<Card> burnedCards;
     std::vector<Card> tableCards;
 
     CardDeck deck;
     RoundPhase phase;
     int bestBet;
-    int betsSum;
     int blind;
     int pot;
 
 
     void burnCard();
+
     bool shouldFinish();
-    void addBetsToPot();
-    void dealCardToPlayer(Player p);
-    void present();
-
-
-
- public:
-    GameRound(std::vector<Player> playersVector, Presenter presenter, int smallBlind);
-    RoundPhase getRoundPhase();
-
-    void start();
-    void bet(Player p, int amount);
-    void fold(Player p);
-
-    const std::vector<Card> getTableCards;
-
-    friend std::ostream &operator<<(std::ostream &os, const GameRound &hand);
-
-    std::vector<Player> getWinners();
 
     void playPreflop();
 
-    void addCardToTable();
+    void playFlop();
 
+    void playTurn();
 
-    void addPlayersBet(Player &player, int amount);
+    void playRiver();
 
-    void removePlayer(Player p);
-
-    void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
-
-    void cycleToEqualizeBets(CyclicIterator it);
-
-    bool playerBetIsEqual(Player p);
-
-    int getPlayerBets(Player p);
+    void prepareNextRound();
 
     bool betsAreEqualized();
 
+    void roundOfBetting(CyclicIterator<Player> it);
+
+    void removePlayer(Player p);
+
+    int getPlayerBets(Player p);
+
     int getPlayerBetToCall(Player p);
 
-    void roundOfBetting(CyclicIterator it);
-};
+    void addCardToTable();
 
+    void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
+
+    void addPlayersBet(Player &player, int amount);
+
+public:
+    GameRound(std::vector<Player> playersVector, int smallBlind);
+
+    RoundPhase getRoundPhase();
+
+    void start();
+
+    std::vector<Player> getWinners();
+};
 
 #endif //POOKER_ABSTRACTROUND_H

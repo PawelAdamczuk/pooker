@@ -23,9 +23,9 @@ public:
 
     PlayerStatus getStatus();
 
-    int call(int, bool canRaise);
+    int call(int amount, bool canRaise);
 
-    void subtractChips(int);
+    void subtractChips(int amount );
 };
 
 

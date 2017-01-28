@@ -4,52 +4,18 @@
 
 #include "GameRound.h"
 
-GameRound::GameRound(std::vector<Player> playersVector, Presenter pres, int blind) {
-    presenter = pres;
+GameRound::GameRound(std::vector<Player> playersVector, int smallBlind) {
     players = playersVector;
 
     deck = CardDeck();
     bets = std::map<Player, int>();
     burnedCards = std::vector<Card>();
     tableCards = std::vector<Card>();
-    blind = blind;
+    blind = smallBlind;
 
     pot = 0;
     bestBet = 0;
-    betsSum = 0;
 }
-
-template<class T>
-class CyclicIterator {
-private:
-    std::vector<T> vec;
-    std::vector<T>::iterator it;
-
-public:
-    CyclicIterator(std::vector<T> vec) : vec(vec), it(vec.begin()) {}
-
-    CyclicIterator &operator++() {
-        it++;
-        if (isEnd()) {
-            it = vec.begin();
-        }
-    }
-
-    CyclicIterator &operator--() {
-        it++;
-        if (isEnd()) {
-            it = vec.begin();
-        }
-    }
-
-    bool isEnd() {
-        return it == vec.end();
-    }
-
-    T &operator*() {
-        return *it;
-    }
-};
 
 void GameRound::burnCard() {
     this->burnedCards.push_back(this->deck.deal());
@@ -73,27 +39,31 @@ bool GameRound::shouldFinish() {
     return this->players.size() <= 1;
 }
 
-void GameRound::addBetsToPot() {
-    for (std::map<Player, int>::iterator it = bets.begin(); it != bets.end(); ++it) {
-        pot += it->second;
-    }
-
-    bets.clear();
-}
-
-void GameRound::present() {
-    presenter.update(this);
-}
-
-void GameRound::dealCardToPlayer(Player p) {
-    p.addCard(deck.deal());
-}
-
 void GameRound::start() {
     this->playPreflop();
 
-}
+    this->prepareNextRound();
+    if (this->shouldFinish()) {
+        return;
+    }
 
+    this->playFlop();
+
+    this->prepareNextRound();
+    if (this->shouldFinish()) {
+        return;
+    }
+
+    this->playTurn();
+
+    this->prepareNextRound();
+    if (this->shouldFinish()) {
+        return;
+    }
+
+    this->playRiver();
+
+}
 
 void GameRound::playPreflop() {
     phase = preflop;
@@ -103,7 +73,7 @@ void GameRound::playPreflop() {
         player.addCard(deck.deal());
     }
 
-    CyclicIterator<Player> it = CyclicIterator(players);
+    CyclicIterator<Player> it = CyclicIterator<Player>(players);
     while ((*it).getStatus() != smallBlind) {
         ++it;
     }
@@ -118,18 +88,66 @@ void GameRound::playPreflop() {
     } while (!this->betsAreEqualized());
 }
 
+void GameRound::playFlop() {
+    phase = flop;
+
+    this->burnCard();
+
+    this->addCardToTable();
+    this->addCardToTable();
+    this->addCardToTable();
+
+    CyclicIterator<Player> it = CyclicIterator<Player>(players);
+
+    do {
+        this->roundOfBetting(it);
+    } while (!this->betsAreEqualized());
+}
+
+void GameRound::playTurn() {
+    phase = turn;
+
+    this->burnCard();
+
+    this->addCardToTable();
+
+    CyclicIterator<Player> it = CyclicIterator<Player>(players);
+
+    do {
+        this->roundOfBetting(it);
+    } while (!this->betsAreEqualized());
+}
+
+void GameRound::playRiver() {
+    phase = river;
+
+    this->burnCard();
+
+    this->addCardToTable();
+
+    CyclicIterator<Player> it = CyclicIterator<Player>(players);
+
+    do {
+        this->roundOfBetting(it);
+    } while (!this->betsAreEqualized());
+}
+
 RoundPhase GameRound::getRoundPhase() {
-    return flop;
+    return phase;
 }
 
-std::ostream &operator<<(std::ostream &os, const GameRound &hand) {
-    return <#initializer#>;
-}
+void GameRound::prepareNextRound() {
+    for (auto elem : bets) {
+        pot += elem.second;
+    }
 
+    bets.clear();
+    bestBet = 0;
+}
 
 bool GameRound::betsAreEqualized() {
     for (Player p : players) {
-        if (!this->getPlayerBetToCall(p) == 0) {
+        if (this->getPlayerBetToCall(p) != 0) {
             return false;
         }
     }
@@ -137,7 +155,7 @@ bool GameRound::betsAreEqualized() {
     return true;
 }
 
-void GameRound::roundOfBetting(CyclicIterator it) {
+void GameRound::roundOfBetting(CyclicIterator<Player> it) {
     int toGo = (int) players.size();
 
     while (toGo != 0) {
@@ -167,7 +185,6 @@ int GameRound::getPlayerBets(Player p) {
 int GameRound::getPlayerBetToCall(Player p) {
     return bestBet - this->getPlayerBets(p);
 }
-
 
 void GameRound::addCardToTable() {
     tableCards.push_back(deck.deal());
@@ -199,6 +216,7 @@ void GameRound::addPlayersBet(Player &player, int amount) {
         bestBet = amount;
     }
 }
+
 
 
 
