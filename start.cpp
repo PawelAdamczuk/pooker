@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "BotPlayer.h"
 #include "GameRound.h"
+#include "Game.h"
 
 
 int main() {
@@ -16,7 +17,6 @@ int main() {
     };
 
 
-    GameRound round = GameRound(players, 5);
-
-    round.start();
+    Game g = Game(players, 5, 100);
+    g.start();
 }

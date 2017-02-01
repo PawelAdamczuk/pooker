@@ -106,7 +106,7 @@ void GameRound::printPlayersInGame() {
 }
 
 void GameRound::playPreflop() {
-    cout << "GameRound: Starting preflop";
+    cout << "GameRound: Starting preflop ";
     this->printPlayersInGame();
 
     phase = preflop;
@@ -242,7 +242,7 @@ void GameRound::addCardToTable() {
 }
 
 void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bool isBlindCall = false) {
-    cout << "GameRound: call to player" << player.getName() << " for amount: " << amount << " pot is: " << pot << endl;
+    cout << "GameRound: call to: " << player.getName() << " for amount: " << amount << " pot is: " << pot << endl;
     if (isBlindCall) {
         player.subtractChips(amount);
         this->addPlayersBet(player, amount);
@@ -266,9 +266,9 @@ void GameRound::addPlayersBet(const Player &player, int amount) {
 
     if (bestBet < amount) {
         bestBet = amount;
-        cout << "GameRound" << player.getName() << " raised! Best bet: " << bestBet << endl;
+        cout << "GameRound " << player.getName() << " raised the bet: " << bestBet << endl;
     } else {
-        cout << "GameRound" << player.getName() << " called" << endl;
+        cout << "GameRound " << player.getName() << " called" << endl;
 
     }
 }

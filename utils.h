@@ -14,7 +14,7 @@ enum RoundPhase {
 };
 
 template<class T>
-class CyclicIterator {
+class CyclicIterator{
 private:
     vector<T> vec;
     typename vector<T>::iterator it;
