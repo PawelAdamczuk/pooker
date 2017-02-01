@@ -32,7 +32,7 @@ public:
 
     void setStatus(PlayerStatus s);
 
-    virtual int call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
+    virtual int call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player*> otherPlayers,
                          const vector<Card> *cards, const map<string, int> *bets, int smallBlind);
 
     void subtractChips(int amount);

@@ -4,6 +4,8 @@
 #include "Card.h"
 #include "CardDeck.h"
 #include "Hand.h"
+#include "map"
+#include <string>
 
 void test_Card_1() {
     Card card1(two, hearts);
@@ -150,7 +152,9 @@ void testBotPlayer() {
 
     vector<Player*> v = {&p};
 
-    test(v[0]->call(1, true, preflop, 1, nullptr, nullptr, nullptr, 10) != -1, "Can make virtual call");
+    auto it = v.begin();
+
+    test((*it)->call(1, true, preflop, 1, std::vector<Player*>(), nullptr, nullptr, 10) != -127, "Can make virtual call");
 }
 
 

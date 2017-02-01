@@ -5,36 +5,32 @@
 #include "Game.h"
 #include "GameRound.h"
 
-Game::Game(vector<Player> playersVector, int smallBlind, int initalMoney) {
+Game::Game(vector<Player*> playersVector, int smallBlind) {
     players = playersVector;
     blind = smallBlind;
-    money = initalMoney;
 }
 
 void Game::start() {
-    players[0].setStatus(smallBlind);
-    players[1].setStatus(bigBlind);
+    players[0]->setStatus(smallBlind);
+    players[1]->setStatus(bigBlind);
 //    while (players.size() > 1) {
 //
 //
 //    }
-    for (auto player : players) {
-        player.addMoney(money);
-    }
 
     GameRound g = GameRound(players, blind);
 
-    vector<Player> w = g.start();
+    vector<Player*> w = g.start();
 
-    for (auto k : w) {
-        cout << "WON: " << k.getName();
+    for (Player* k : w) {
+        cout << "WON: " << k->getName();
     }
 
 
 }
 
-vector<Player> Game::copyPlayers() {
-    vector<Player> copy = vector<Player>();
+vector<Player*> Game::copyPlayers() {
+    vector<Player*> copy = vector<Player*>();
     std::copy(players.begin(), players.end(), back_inserter(copy));
     return copy;
 }

@@ -9,14 +9,18 @@
 
 
 int main() {
-    vector<Player> players = {
-            BotPlayer("James", 100),
-            BotPlayer("Bruce", 100),
-            BotPlayer("Kate", 100),
-            BotPlayer("Ian", 100),
+    BotPlayer james ("James", 100);
+    BotPlayer kate ("Kate", 100);
+    BotPlayer bruce("Bruce", 100);
+    BotPlayer ian ("Ian",100);
+    vector<Player*> players = {
+            &james,
+            &kate,
+            &bruce,
+            &ian
     };
 
 
-    Game g = Game(players, 5, 100);
+    Game g = Game(players, 5);
     g.start();
 }

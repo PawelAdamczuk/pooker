@@ -11,12 +11,13 @@
 #include "Card.h"
 #include "CardDeck.h"
 #include "utils.h"
+#include "Hand.h"
 #include <string>
 
 
 class GameRound {
 private:
-    std::vector<Player> players;
+    std::vector<Player*> players;
     std::map<string, int> bets;
     std::vector<Card> burnedCards;
     std::vector<Card> tableCards;
@@ -44,11 +45,9 @@ private:
 
     bool betsAreEqualized();
 
-    void roundOfBetting(CyclicIterator<Player> it);
-
     void addCardToTable();
 
-    vector<Player> getWinners();
+    vector<Player*> getWinners();
 
     void printPlayersInGame();
 
@@ -62,11 +61,15 @@ private:
 
     int getPlayerBetToCall(string playersBet);
 
+    void roundOfBetting(CyclicIterator<Player *> it);
+
+    std::vector<Hand> getPlayerHands(Player *player);
 public:
-    GameRound(std::vector<Player> playersVector, int smallBlind);
+    GameRound(std::vector<Player*> playersVector, int smallBlind);
 
-    std::vector<Player> start();
+    std::vector<Player*> start();
 
+    bool compareHands(Player *first, Player *second);
 };
 
 #endif //POOKER_ABSTRACTROUND_H

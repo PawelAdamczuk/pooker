@@ -10,17 +10,16 @@
 
 class Game {
 private :
-    vector<Player> players;
+    vector<Player*> players;
     int blind;
-    int money;
 
 
 public:
-    Game(vector<Player>, int, int pot);
+    Game(vector<Player*>, int);
 
     void start();
 
-    vector<Player> copyPlayers();
+    vector<Player*> copyPlayers();
 
     void updateBlindsAndRemove();
 

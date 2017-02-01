@@ -8,7 +8,7 @@
 
 BotPlayer::BotPlayer(const string &name, int money) : Player(name, money) {}
 
-int BotPlayer::call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
+int BotPlayer::call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player *> otherPlayers,
                     const vector<Card> *cards, const map<string, int> *bets, int smallBlind) {
 
     if (amount > money) return -1;
@@ -22,15 +22,15 @@ int BotPlayer::call(int amount, bool canRaise, const RoundPhase phase, int pot, 
 
         case flop : {
             if (amount == 0 && randomTest(20)) return this->getMaxPossible(amount + 4 * smallBlind);
-            if( randomTest(30)) return this->getMaxPossible(amount + 2 * smallBlind);
-            if(randomTest(80)) return amount;
+            if (randomTest(30)) return this->getMaxPossible(amount + 2 * smallBlind);
+            if (randomTest(80)) return amount;
             break;
         }
 
         case turn : {
             if (amount == 0 && randomTest(30)) return this->getMaxPossible(amount + 8 * smallBlind);
-            if( randomTest(40)) return this->getMaxPossible(amount + 4 * smallBlind);
-            if(randomTest(80)) return amount;
+            if (randomTest(40)) return this->getMaxPossible(amount + 4 * smallBlind);
+            if (randomTest(80)) return amount;
             break;
         }
 
@@ -42,12 +42,12 @@ int BotPlayer::call(int amount, bool canRaise, const RoundPhase phase, int pot, 
         }
     }
 
-    return -1;
+    return (amount == 0) ? 0 : -1;
 }
 
 
 bool BotPlayer::randomTest(int probability) {
-    return rand() <= probability;
+    return rand() % 100 <= probability;
 }
 
 int BotPlayer::getMaxPossible(int bet) {

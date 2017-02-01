@@ -15,8 +15,9 @@ void Player::setStatus(PlayerStatus s) {
     status = s;
 }
 
-int Player::call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
+int Player::call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player*> otherPlayers,
                  const vector<Card> *cards, const map<string, int> *bets, int smallBlind) {
+
     return -1;
 }
 
