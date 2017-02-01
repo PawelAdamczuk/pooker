@@ -124,10 +124,10 @@ void GameRound::playPreflop() {
     }
 
     cout << "GameRound: small blind: " << endl;
-    this->callPlayer(*it, blind, false, true); // small blind
+    this->callPlayer(&*it, blind, false, true); // small blind
     ++it;
     cout << "GameRound: big blind: " << endl;
-    this->callPlayer(*it, blind * 2, false, true); //big blind
+    this->callPlayer(&*it, blind * 2, false, true); //big blind
     ++it;
 
     do {
@@ -195,7 +195,7 @@ void GameRound::prepareNextRound() {
 
 bool GameRound::betsAreEqualized() {
     for (Player p : players) {
-        if (this->getPlayerBetToCall(p) != 0) {
+        if (this->getPlayerBetToCall(p.getName()) != 0) {
             return false;
         }
     }
@@ -208,30 +208,30 @@ void GameRound::roundOfBetting(CyclicIterator<Player> it) {
 
     while (toGo != 0) {
         toGo--;
-        int toCall = this->getPlayerBetToCall(*it);
-        this->callPlayer(*it, toCall, true, false);
+        int toCall = this->getPlayerBetToCall((*it).getName());
+        this->callPlayer(&*it, toCall, true, false);
         ++it;
     }
 }
 
-void GameRound::removePlayer(Player p) {
+void GameRound::removePlayer(string playersName) {
     for (int i = 0; i < players.size(); i++) {
-        if (players[i].getName() == p.getName()) {
+        if (players[i].getName() == playersName) {
             players.erase(players.begin() + i);
             return;
         }
     }
 }
 
-int GameRound::getPlayerBets(const Player p) {
-    if (this->bets.find(p.getName()) != this->bets.end()) {
-        return this->bets[p.getName()];
+int GameRound::getPlayerBets(string playersName) {
+    if (this->bets.find(playersName) != this->bets.end()) {
+        return this->bets[playersName];
     }
     return 0;
 }
 
-int GameRound::getPlayerBetToCall(Player p) {
-    return bestBet - this->getPlayerBets(p);
+int GameRound::getPlayerBetToCall(string playersName) {
+    return bestBet - this->getPlayerBets(playersName);
 }
 
 void GameRound::addCardToTable() {
@@ -241,34 +241,36 @@ void GameRound::addCardToTable() {
     tableCards.push_back(card);
 }
 
-void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bool isBlindCall = false) {
-    cout << "GameRound: call to: " << player.getName() << " for amount: " << amount << " pot is: " << pot << endl;
+void GameRound::callPlayer(Player* player, int amount, bool canRaise = false, bool isBlindCall = false) {
+    const string playersName = player->getName();
+
+    cout << "GameRound: call to: " << playersName << " for amount: " << amount << " pot is: " << pot << endl;
     if (isBlindCall) {
-        player.subtractChips(amount);
-        this->addPlayersBet(player, amount);
+        player->subtractChips(amount);
+        this->addPlayersBet(playersName, amount);
     }
 
-    int finalAmount = player.call(amount, canRaise, phase, pot, &players, &tableCards, &bets, blind);
+    int finalAmount = player->call(amount, canRaise, phase, pot, &players, &tableCards, &bets, blind);
     if (finalAmount == -1 || finalAmount < amount) {
-        cout << "GameRound" << player.getName() << " folded" << endl;
-        return this->removePlayer(player);
+        cout << "GameRound" << playersName << " folded" << endl;
+        return this->removePlayer(playersName);
     }
 
-    player.subtractChips(finalAmount);
-    this->addPlayersBet(player, finalAmount);
+    player->subtractChips(finalAmount);
+    this->addPlayersBet(playersName, finalAmount);
 }
 
-void GameRound::addPlayersBet(const Player &player, int amount) {
+void GameRound::addPlayersBet(string playersName, int amount) {
     pot += amount;
-    amount += this->getPlayerBets(player);
+    amount += this->getPlayerBets(playersName);
 
-    this->bets[player.getName()] = amount;
+    this->bets[playersName] = amount;
 
     if (bestBet < amount) {
         bestBet = amount;
-        cout << "GameRound " << player.getName() << " raised the bet: " << bestBet << endl;
+        cout << "GameRound " << playersName << " raised the bet: " << bestBet << endl;
     } else {
-        cout << "GameRound " << player.getName() << " called" << endl;
+        cout << "GameRound " << playersName << " called" << endl;
 
     }
 }

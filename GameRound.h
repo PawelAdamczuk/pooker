@@ -46,25 +46,27 @@ private:
 
     void roundOfBetting(CyclicIterator<Player> it);
 
-    void removePlayer(Player p);
-
-    int getPlayerBets(Player p);
-
-    int getPlayerBetToCall(Player p);
-
     void addCardToTable();
 
-    void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
-
-    void addPlayersBet(const Player &player, int amount);
-
     vector<Player> getWinners();
+
+    void printPlayersInGame();
+
+    void addPlayersBet(string playersName, int amount);
+
+    int getPlayerBets(string playersName);
+
+    void removePlayer(string playersName);
+
+    void callPlayer(Player *player, int amount, bool canRaise, bool isBlindCall);
+
+    int getPlayerBetToCall(string playersBet);
+
 public:
     GameRound(std::vector<Player> playersVector, int smallBlind);
 
     std::vector<Player> start();
 
-    void printPlayersInGame();
 };
 
 #endif //POOKER_ABSTRACTROUND_H
