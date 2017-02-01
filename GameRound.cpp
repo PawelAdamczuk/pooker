@@ -192,14 +192,8 @@ void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bo
         this->addPlayersBet(player, amount);
     }
 
-    int finalAmount = player.call(amount,
-                                  canRaise,
-                                  phase,
-                                  pot,
-                                  &players,
-                                  &tableCards,
-                                  &bets);
-    if (finalAmount == -1) {
+    int finalAmount = player.call(amount, canRaise, phase, pot, &players, &tableCards, &bets, blind);
+    if (finalAmount == -1 || finalAmount < amount) {
         return this->removePlayer(player);
     }
 

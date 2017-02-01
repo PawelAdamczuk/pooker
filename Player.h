@@ -18,7 +18,7 @@ enum PlayerStatus {
 };
 
 class Player {
-private :
+protected:
     vector<Card> hand;
     int money;
     string name;
@@ -32,9 +32,8 @@ public:
 
     void setStatus(PlayerStatus s);
 
-    int call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
-             const vector<Card> *cards,
-             const map<string, int> *bets);
+    virtual int call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
+                         const vector<Card> *cards, const map<string, int> *bets, int smallBlind);
 
     void subtractChips(int amount);
     string getName() const;

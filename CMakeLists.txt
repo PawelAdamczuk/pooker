@@ -9,7 +9,7 @@ set(SOURCE_FILES
         CardDeck.cpp CardDeck.h
         Hand.cpp Hand.h
         GameRound.cpp GameRound.h
-        Player.cpp Player.h utils.h)
+        Player.cpp Player.h utils.h BotPlayer.cpp BotPlayer.h)
 
 add_executable(pooker ${SOURCE_FILES})
 
@@ -19,5 +19,5 @@ set(TEST_FILES
         CardDeck.cpp CardDeck.h
         Hand.cpp Hand.h
         GameRound.cpp GameRound.h
-        Player.cpp Player.h)
+        Player.cpp Player.h BotPlayer.cpp BotPlayer.h)
 add_executable(tests ${TEST_FILES})
