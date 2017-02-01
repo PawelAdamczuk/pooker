@@ -57,12 +57,12 @@ private:
     void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
 
     void addPlayersBet(const Player &player, int amount);
+
+    vector<Player> getWinners();
 public:
     GameRound(std::vector<Player> playersVector, int smallBlind);
 
-    void start();
-
-    std::vector<Player> getWinners(); //TODO move to start
+    std::vector<Player> start();
 
 };
 

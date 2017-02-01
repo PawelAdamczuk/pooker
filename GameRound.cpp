@@ -3,14 +3,15 @@
 //
 
 #include "GameRound.h"
+#include "Hand.h"
 
-GameRound::GameRound(std::vector<Player> playersVector, int smallBlind) {
+GameRound::GameRound(vector<Player> playersVector, int smallBlind) {
     players = playersVector;
 
     deck = CardDeck();
-    bets = std::map<string, int>();
-    burnedCards = std::vector<Card>();
-    tableCards = std::vector<Card>();
+    bets = map<string, int>();
+    burnedCards = vector<Card>();
+    tableCards = vector<Card>();
 
     blind = smallBlind;
     pot = 0;
@@ -21,16 +22,47 @@ void GameRound::burnCard() {
     this->burnedCards.push_back(this->deck.deal());
 }
 
-std::vector<Player> GameRound::getWinners() {
-//    std::sort(this->players.begin(), this->players.end()); //TODO FIX
-    std::vector<Player> winners;
+bool compareHands(Player first, Player second) {
+    vector<Card> firstCards = vector<Card>();
+    std::copy(first.getCards().begin(), first.getCards().end(), back_inserter(firstCards));
+
+    vector<Card> secondCards = vector<Card>();
+    std::copy(second.getCards().begin(), second.getCards().end(), back_inserter(secondCards));
+
+    vector<Hand> firstHands = Hand::evaluate(firstCards);
+    vector<Hand> secondHands = Hand::evaluate(secondCards);
+
+    auto f = firstHands.begin();
+    auto s = secondHands.begin();
+
+    while (true) {
+        bool firstEnded = f == firstHands.end();
+        bool secondEnded = s == secondHands.end();
+        if (firstEnded && secondEnded) return false;
+
+        if (firstEnded) return true;
+
+        if (secondEnded) return true;
+
+        bool handsAreEqual = *f < *s && *s < *f;
+        if (!handsAreEqual) return *f < *s;
+
+        f++;
+        s++;
+    }
+}
+
+
+vector<Player> GameRound::getWinners() {
+    sort(this->players.begin(), this->players.end(), compareHands);
+    vector<Player> winners;
 
     auto it = this->players.end();
     winners.push_back(*it--);
-    //TODO FIX
-//    while (*it == winners.back()) {
-//        winners.push_back(*it--);
-//    }
+
+    while (compareHands(*it, winners.back())) { //TODO ensure good sorting
+        winners.push_back(*it--);
+    }
 
     return winners;
 }
@@ -39,30 +71,27 @@ bool GameRound::shouldFinish() {
     return this->players.size() <= 1;
 }
 
-void GameRound::start() {
-    this->playPreflop();
+vector<Player> GameRound::start() {
+    while (true) {
+        this->playPreflop();
 
-    this->prepareNextRound();
-    if (this->shouldFinish()) {
-        return;
+        this->prepareNextRound();
+        if (this->shouldFinish()) break;
+
+        this->playFlop();
+
+        this->prepareNextRound();
+        if (this->shouldFinish()) break;
+
+        this->playTurn();
+
+        this->prepareNextRound();
+        if (this->shouldFinish()) break;
+
+        this->playRiver();
     }
 
-    this->playFlop();
-
-    this->prepareNextRound();
-    if (this->shouldFinish()) {
-        return;
-    }
-
-    this->playTurn();
-
-    this->prepareNextRound();
-    if (this->shouldFinish()) {
-        return;
-    }
-
-    this->playRiver();
-
+    return this->getWinners();
 }
 
 void GameRound::playPreflop() {
