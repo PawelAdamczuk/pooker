@@ -19,6 +19,7 @@ GameRound::GameRound(vector<Player> playersVector, int smallBlind) {
 }
 
 void GameRound::burnCard() {
+    cout << "GameRound: burning card" << endl;
     this->burnedCards.push_back(this->deck.deal());
 }
 
@@ -94,7 +95,20 @@ vector<Player> GameRound::start() {
     return this->getWinners();
 }
 
+void GameRound::printPlayersInGame() {
+    cout << "players in game: ";
+
+    for (auto p: players) {
+        cout << p.getName() << " ";
+    }
+
+    cout << endl;
+}
+
 void GameRound::playPreflop() {
+    cout << "GameRound: Starting preflop";
+    this->printPlayersInGame();
+
     phase = preflop;
 
     for (auto player :players) {
@@ -102,13 +116,17 @@ void GameRound::playPreflop() {
         player.addCard(deck.deal());
     }
 
+
     CyclicIterator<Player> it = CyclicIterator<Player>(players);
+
     while ((*it).getStatus() != smallBlind) {
         ++it;
     }
 
+    cout << "GameRound: small blind: " << endl;
     this->callPlayer(*it, blind, false, true); // small blind
     ++it;
+    cout << "GameRound: big blind: " << endl;
     this->callPlayer(*it, blind * 2, false, true); //big blind
     ++it;
 
@@ -118,6 +136,9 @@ void GameRound::playPreflop() {
 }
 
 void GameRound::playFlop() {
+    cout << "GameRound: Starting flop" << endl;
+    this->printPlayersInGame();
+
     phase = flop;
 
     this->burnCard();
@@ -134,6 +155,9 @@ void GameRound::playFlop() {
 }
 
 void GameRound::playTurn() {
+    cout << "GameRound: Starting turn" << endl;
+    this->printPlayersInGame();
+
     phase = turn;
 
     this->burnCard();
@@ -148,6 +172,9 @@ void GameRound::playTurn() {
 }
 
 void GameRound::playRiver() {
+    cout << "GameRound: Starting river" << endl;
+    this->printPlayersInGame();
+
     phase = river;
 
     this->burnCard();
@@ -162,10 +189,6 @@ void GameRound::playRiver() {
 }
 
 void GameRound::prepareNextRound() {
-    for (auto elem : bets) {
-        pot += elem.second;
-    }
-
     bets.clear();
     bestBet = 0;
 }
@@ -212,10 +235,14 @@ int GameRound::getPlayerBetToCall(Player p) {
 }
 
 void GameRound::addCardToTable() {
-    tableCards.push_back(deck.deal());
+
+    const Card &card = deck.deal();
+    cout << "GameRound: adding card to table: " << card;
+    tableCards.push_back(card);
 }
 
 void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bool isBlindCall = false) {
+    cout << "GameRound: call to player" << player.getName() << " for amount: " << amount << " pot is: " << pot << endl;
     if (isBlindCall) {
         player.subtractChips(amount);
         this->addPlayersBet(player, amount);
@@ -223,6 +250,7 @@ void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bo
 
     int finalAmount = player.call(amount, canRaise, phase, pot, &players, &tableCards, &bets, blind);
     if (finalAmount == -1 || finalAmount < amount) {
+        cout << "GameRound" << player.getName() << " folded" << endl;
         return this->removePlayer(player);
     }
 
@@ -231,12 +259,17 @@ void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bo
 }
 
 void GameRound::addPlayersBet(const Player &player, int amount) {
+    pot += amount;
     amount += this->getPlayerBets(player);
 
     this->bets[player.getName()] = amount;
 
     if (bestBet < amount) {
         bestBet = amount;
+        cout << "GameRound" << player.getName() << " raised! Best bet: " << bestBet << endl;
+    } else {
+        cout << "GameRound" << player.getName() << " called" << endl;
+
     }
 }
 
