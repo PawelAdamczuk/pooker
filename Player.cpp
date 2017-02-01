@@ -3,6 +3,7 @@
 //
 
 #include "Player.h"
+#include "GameRound.h"
 
 using namespace std;
 
@@ -14,13 +15,19 @@ void Player::setStatus(PlayerStatus s) {
     status = s;
 }
 
-int Player::call(int amount, bool canRaise) {
+int Player::call(int amount,
+                 bool canRaise,
+                 const RoundPhase phase,
+                 int pot,
+                 const vector<Player> *otherPlayers,
+                 const vector<Card> *cards,
+                 const map<string, int> *bets) {
     //TODO implement
     return 0;
 }
 
 void Player::subtractChips(int amount) {
-    if(amount> money){
+    if (amount > money) {
         throw std::runtime_error("Attempting to subtract too much");
     }
 

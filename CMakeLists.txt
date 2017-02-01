@@ -9,7 +9,7 @@ set(SOURCE_FILES
         CardDeck.cpp CardDeck.h
         Hand.cpp Hand.h
         GameRound.cpp GameRound.h
-        Player.cpp Player.h)
+        Player.cpp Player.h utils.h)
 
 add_executable(pooker ${SOURCE_FILES})
 

@@ -10,45 +10,9 @@
 #include "map"
 #include "Card.h"
 #include "CardDeck.h"
+#include "utils.h"
 #include <string>
 
-enum RoundPhase {
-    preflop = 0, flop, turn, river
-};
-
-template<class T>
-class CyclicIterator {
-private:
-    std::vector<T> vec;
-    typename std::vector<T>::iterator it;
-
-public:
-    CyclicIterator(std::vector<T> vec) : vec(vec), it(vec.begin()) {}
-
-    CyclicIterator& operator++() {
-        it++;
-        if (isEnd()) {
-            it = vec.begin();
-        }
-        return *this;
-    }
-
-    CyclicIterator& operator--() {
-        it++;
-        if (isEnd()) {
-            it = vec.begin();
-        }
-        return *this;
-    }
-
-    bool isEnd() {
-        return it == vec.end();
-    }
-
-    T &operator*() {
-        return *it;
-    }
-};
 
 class GameRound {
 private:
@@ -96,11 +60,9 @@ private:
 public:
     GameRound(std::vector<Player> playersVector, int smallBlind);
 
-    RoundPhase getRoundPhase();
-
     void start();
 
-    std::vector<Player> getWinners();
+    std::vector<Player> getWinners(); //TODO move to start
 
 };
 

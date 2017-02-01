@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include "Card.h"
+#include <map>
+#include "utils.h"
 
 using namespace std;
 
@@ -30,7 +32,9 @@ public:
 
     void setStatus(PlayerStatus s);
 
-    int call(int amount, bool canRaise);
+    int call(int amount, bool canRaise, const RoundPhase phase, int pot, const vector<Player> *otherPlayers,
+             const vector<Card> *cards,
+             const map<string, int> *bets);
 
     void subtractChips(int amount);
     string getName() const;

@@ -132,10 +132,6 @@ void GameRound::playRiver() {
     } while (!this->betsAreEqualized());
 }
 
-RoundPhase GameRound::getRoundPhase() {
-    return phase;
-}
-
 void GameRound::prepareNextRound() {
     for (auto elem : bets) {
         pot += elem.second;
@@ -168,7 +164,7 @@ void GameRound::roundOfBetting(CyclicIterator<Player> it) {
 
 void GameRound::removePlayer(Player p) {
     for (int i = 0; i < players.size(); i++) {
-        if (players[i].getName()== p.getName()) {
+        if (players[i].getName() == p.getName()) {
             players.erase(players.begin() + i);
             return;
         }
@@ -196,7 +192,13 @@ void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bo
         this->addPlayersBet(player, amount);
     }
 
-    int finalAmount = player.call(amount, canRaise);
+    int finalAmount = player.call(amount,
+                                  canRaise,
+                                  phase,
+                                  pot,
+                                  &players,
+                                  &tableCards,
+                                  &bets);
     if (finalAmount == -1) {
         return this->removePlayer(player);
     }
