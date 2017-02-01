@@ -10,6 +10,7 @@
 #include "map"
 #include "Card.h"
 #include "CardDeck.h"
+#include <string>
 
 enum RoundPhase {
     preflop = 0, flop, turn, river
@@ -52,7 +53,7 @@ public:
 class GameRound {
 private:
     std::vector<Player> players;
-    std::map<Player, int> bets;
+    std::map<string, int> bets;
     std::vector<Card> burnedCards;
     std::vector<Card> tableCards;
 
@@ -91,8 +92,7 @@ private:
 
     void callPlayer(Player &player, int amount, bool canRaise, bool isBlindCall);
 
-    void addPlayersBet(Player &player, int amount);
-
+    void addPlayersBet(const Player &player, int amount);
 public:
     GameRound(std::vector<Player> playersVector, int smallBlind);
 
@@ -101,6 +101,7 @@ public:
     void start();
 
     std::vector<Player> getWinners();
+
 };
 
 #endif //POOKER_ABSTRACTROUND_H

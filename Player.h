@@ -5,27 +5,44 @@
 #ifndef POOKER_PLAYER_H
 #define POOKER_PLAYER_H
 
-
+#include <string>
+#include <vector>
 #include "Card.h"
 
+using namespace std;
+
 enum PlayerStatus {
-    pleb, dealer, smallBlind, bigBlind
+    pleb, smallBlind, bigBlind
 };
 
 class Player {
+private :
+    vector<Card> hand;
+    int money;
+    string name;
+    PlayerStatus status;
+
 
 public:
-    bool operator==(const Player &b) const;
-
-    bool operator<(const Player &b) const;
+    Player(string name, int money);
 
     void addCard(Card card);
 
-    PlayerStatus getStatus();
+    void setStatus(PlayerStatus s);
 
     int call(int amount, bool canRaise);
 
-    void subtractChips(int amount );
+    void subtractChips(int amount);
+    string getName() const;
+    int getMoney();
+
+    PlayerStatus getStatus() const;
+
+    void addMoney(int amount);
+
+    vector<Card> getCards();
+
+    bool isDealer;
 };
 
 

@@ -8,11 +8,11 @@ GameRound::GameRound(std::vector<Player> playersVector, int smallBlind) {
     players = playersVector;
 
     deck = CardDeck();
-    bets = std::map<Player, int>();
+    bets = std::map<string, int>();
     burnedCards = std::vector<Card>();
     tableCards = std::vector<Card>();
-    blind = smallBlind;
 
+    blind = smallBlind;
     pot = 0;
     bestBet = 0;
 }
@@ -22,15 +22,15 @@ void GameRound::burnCard() {
 }
 
 std::vector<Player> GameRound::getWinners() {
-    std::sort(this->players.begin(), this->players.end());
+//    std::sort(this->players.begin(), this->players.end()); //TODO FIX
     std::vector<Player> winners;
 
     auto it = this->players.end();
     winners.push_back(*it--);
-
-    while (*it == winners.back()) {
-        winners.push_back(*it--);
-    }
+    //TODO FIX
+//    while (*it == winners.back()) {
+//        winners.push_back(*it--);
+//    }
 
     return winners;
 }
@@ -168,16 +168,16 @@ void GameRound::roundOfBetting(CyclicIterator<Player> it) {
 
 void GameRound::removePlayer(Player p) {
     for (int i = 0; i < players.size(); i++) {
-        if (players[i] == p) {
+        if (players[i].getName()== p.getName()) {
             players.erase(players.begin() + i);
             return;
         }
     }
 }
 
-int GameRound::getPlayerBets(Player p) {
-    if (this->bets.find(p) != this->bets.end()) {
-        return this->bets[p];
+int GameRound::getPlayerBets(const Player p) {
+    if (this->bets.find(p.getName()) != this->bets.end()) {
+        return this->bets[p.getName()];
     }
     return 0;
 }
@@ -205,12 +205,10 @@ void GameRound::callPlayer(Player &player, int amount, bool canRaise = false, bo
     this->addPlayersBet(player, finalAmount);
 }
 
-void GameRound::addPlayersBet(Player &player, int amount) {
-    if (this->bets.find(player) != this->bets.end()) {
-        amount += this->bets[player];
-    }
+void GameRound::addPlayersBet(const Player &player, int amount) {
+    amount += this->getPlayerBets(player);
 
-    this->bets[player] = amount;
+    this->bets[player.getName()] = amount;
 
     if (bestBet < amount) {
         bestBet = amount;
