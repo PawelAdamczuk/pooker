@@ -38,4 +38,3 @@ Card CardDeck::deal() {
     return temp;
 }
 
-
