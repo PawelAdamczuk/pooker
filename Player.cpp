@@ -21,6 +21,10 @@ int Player::call(int amount, bool canRaise, const RoundPhase phase, int pot, con
     return -1;
 }
 
+void Player::clearHand(){
+    hand = vector<Card>();
+}
+
 void Player::subtractChips(int amount) {
     if (amount > money) {
         throw std::runtime_error("Attempting to subtract too much");

@@ -39,20 +39,26 @@ void Game::start() {
         i++;
     }
 
+    std::cout << "*** The winner is " << players[0]->getName() << " won: " << players[0]->getMoney() << " ***"
+              << std::endl;
 }
 
 void Game::updateBlindsAndRemove() {
     std::vector<Player *> newPlay = std::vector<Player *>();
 
     for (auto it = players.begin(); it != players.end(); it++) {
-        if ((*it)->getMoney() < smallBlind) {
+        if ((*it)->getMoney() <= blind * 2) {
             cout << (*it)->getName() << " will be removed" << endl;
         } else {
             newPlay.push_back((*it));
+            (*it)->clearHand();
         }
     }
 
-    players = newPlay;
+    players.clear();
+    for (Player *p: newPlay) {
+        players.push_back(p);
+    }
 }
 
 Game::~Game() {

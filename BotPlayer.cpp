@@ -47,7 +47,7 @@ int BotPlayer::call(int amount, bool canRaise, const RoundPhase phase, int pot, 
 
 
 bool BotPlayer::randomTest(int probability) {
-    return rand() % 100 <= probability;
+    return std::rand() % 100 <= probability;
 }
 
 int BotPlayer::getMaxPossible(int bet) {

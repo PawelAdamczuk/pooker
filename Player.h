@@ -46,6 +46,8 @@ public:
     vector<Card> getCards();
 
     bool isDealer;
+
+    void clearHand();
 };
 
 

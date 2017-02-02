@@ -30,7 +30,7 @@ bool GameRound::compareHands(Player *first, Player *second) { //true if first pr
     auto f = firstHands.begin();
     auto s = secondHands.begin();
 
-    if(*f == *s)
+    if (*f == *s)
         return false;
 
     return !(*f < *s);
@@ -39,7 +39,12 @@ bool GameRound::compareHands(Player *first, Player *second) { //true if first pr
 std::vector<Hand> GameRound::getPlayerHands(Player *player) {
     std::vector<Card> playerCards = std::vector<Card>();
 
-    std::copy(tableCards.begin(), tableCards.end(), back_inserter(playerCards));
+    for (Card c: tableCards) {
+        playerCards.push_back(c);
+    }
+    for (Card c : player->getCards()) {
+        playerCards.push_back(c);
+    }
 
     std::vector<Hand> result = Hand::evaluate(playerCards);
 
@@ -61,7 +66,7 @@ std::vector<Player *> GameRound::getWinners() {
     winners.push_back(*it);
     it++;
 
-    while (it != players.end() && !(compareHands(*it, winners.back()))) { //TODO ensure good sorting
+    while (it != players.end() && !(compareHands(*it, winners.back()))) {
         winners.push_back(*it);
         it++;
     }
@@ -103,9 +108,6 @@ std::vector<Player *> GameRound::start() {
 
         if (hands.size() > 0) {
             std::cout << p->getName() << ": " << hands[0] << std::endl;
-            for (auto k : hands) {
-                cout << k << endl;
-            }
         } else {
             std::cout << p->getName() << ": nothing" << std::endl;
         }
@@ -172,8 +174,6 @@ void GameRound::playFlop() {
 
     this->printTableCards();
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
-
     do {
         this->roundOfBetting();
         std::cout << std::endl;
@@ -192,8 +192,6 @@ void GameRound::playTurn() {
     this->addCardToTable();
 
     this->printTableCards();
-
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
         this->roundOfBetting();
@@ -214,8 +212,6 @@ void GameRound::playRiver() {
 
     this->printTableCards();
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
-
     do {
         this->roundOfBetting();
         std::cout << std::endl;
@@ -229,6 +225,10 @@ void GameRound::prepareNextRound() {
 }
 
 bool GameRound::betsAreEqualized() {
+    if (players.size() == 1) {
+        return true;
+    }
+
     for (Player *p: players) {
         if (this->getPlayerBetToCall(p->getName()) != 0) {
             return false;
@@ -244,9 +244,15 @@ void GameRound::roundOfBetting() {
     CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     while (toGo != 0) {
+        if (players.size() == 1) {
+            break;
+        }
         toGo--;
+
         int toCall = this->getPlayerBetToCall((*it)->getName());
         this->callPlayer(*it, toCall, true, false);
+
+
         ++it;
     }
 }
