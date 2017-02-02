@@ -57,3 +57,11 @@ void Game::updateBlindsAndRemove() {
 
 }
 
+Game::~Game() {
+    for (std::vector<Player*>::iterator it = players.begin() ; it != players.end(); ++it)
+    {
+        delete (*it);
+    }
+    players.clear();
+}
+

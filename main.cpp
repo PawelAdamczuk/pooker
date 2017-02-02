@@ -9,15 +9,15 @@
 
 
 int main() {
-    BotPlayer james ("James", 100);
-    BotPlayer kate ("Kate", 100);
-    BotPlayer bruce("Bruce", 100);
-    BotPlayer ian ("Ian",100);
+    BotPlayer *james = new BotPlayer("James", 100);
+    BotPlayer *kate = new BotPlayer("Kate", 100);
+    BotPlayer *bruce = new BotPlayer("Bruce", 100);
+    BotPlayer *ian = new BotPlayer("Ian",100);
     vector<Player*> players = {
-            &james,
-            &kate,
-            &bruce,
-            &ian
+            james,
+            kate,
+            bruce,
+            ian
     };
 
 

@@ -15,6 +15,8 @@ private :
 
 
 public:
+    virtual ~Game();
+
     Game(vector<Player*>, int);
 
     void start();

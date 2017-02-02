@@ -126,7 +126,7 @@ void GameRound::playPreflop() {
     }
 
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(players);
+    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     while ((*it)->getStatus() != smallBlind) {
         ++it;
@@ -158,7 +158,7 @@ void GameRound::playFlop() {
     this->addCardToTable();
     this->addCardToTable();
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(players);
+    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
         this->roundOfBetting(it);
@@ -177,7 +177,7 @@ void GameRound::playTurn() {
 
     this->addCardToTable();
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(players);
+    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
         this->roundOfBetting(it);
@@ -196,7 +196,7 @@ void GameRound::playRiver() {
 
     this->addCardToTable();
 
-    CyclicIterator<Player *> it = CyclicIterator<Player *>(players);
+    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
         this->roundOfBetting(it);

@@ -16,16 +16,18 @@ enum RoundPhase {
 template<class T>
 class CyclicIterator{
 private:
-    vector<T> vec;
+    vector<T> *vec;
     typename vector<T>::iterator it;
 
 public:
-    CyclicIterator(vector<T> vec) : vec(vec), it(vec.begin()) {}
+    CyclicIterator(vector<T> *vec) : vec(vec) {
+        this->it = vec->begin();
+    }
 
     CyclicIterator& operator++() {
         it++;
         if (isEnd()) {
-            it = vec.begin();
+            it = vec->begin();
         }
         return *this;
     }
@@ -33,13 +35,13 @@ public:
     CyclicIterator& operator--() {
         it++;
         if (isEnd()) {
-            it = vec.begin();
+            it = vec->begin();
         }
         return *this;
     }
 
     bool isEnd() {
-        return it == vec.end();
+        return it == vec->end();
     }
 
     T &operator*() {
