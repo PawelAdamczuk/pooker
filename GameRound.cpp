@@ -125,6 +125,8 @@ void GameRound::playPreflop() {
         player->addCard(deck.deal());
     }
 
+    this->printTableCards();
+
 
     CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
@@ -140,7 +142,7 @@ void GameRound::playPreflop() {
     ++it;
 
     do {
-        this->roundOfBetting(it);
+        this->roundOfBetting();
         std::cout << std::endl;
     } while (!this->betsAreEqualized());
     std::cout << std::endl;
@@ -158,10 +160,12 @@ void GameRound::playFlop() {
     this->addCardToTable();
     this->addCardToTable();
 
+    this->printTableCards();
+
     CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
-        this->roundOfBetting(it);
+        this->roundOfBetting();
         std::cout << std::endl;
     } while (!this->betsAreEqualized());
     std::cout << std::endl;
@@ -177,10 +181,12 @@ void GameRound::playTurn() {
 
     this->addCardToTable();
 
+    this->printTableCards();
+
     CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
-        this->roundOfBetting(it);
+        this->roundOfBetting();
         std::cout << std::endl;
     } while (!this->betsAreEqualized());
     std::cout << std::endl;
@@ -196,10 +202,12 @@ void GameRound::playRiver() {
 
     this->addCardToTable();
 
+    this->printTableCards();
+
     CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     do {
-        this->roundOfBetting(it);
+        this->roundOfBetting();
         std::cout << std::endl;
     } while (!this->betsAreEqualized());
     std::cout << std::endl;
@@ -220,8 +228,10 @@ bool GameRound::betsAreEqualized() {
     return true;
 }
 
-void GameRound::roundOfBetting(CyclicIterator<Player *> it) {
+void GameRound::roundOfBetting() {
     int toGo = (int) players.size();
+
+    CyclicIterator<Player *> it = CyclicIterator<Player *>(&players);
 
     while (toGo != 0) {
         toGo--;
@@ -290,6 +300,13 @@ void GameRound::addPlayersBet(string playersName, int amount) {
     } else {
         std::cout << playersName << " called" << std::endl;
 
+    }
+}
+
+void GameRound::printTableCards() {
+    std::cout <<  "Cards on the table: " << std::endl;
+    for(std::vector<Card>::iterator it = this->tableCards.begin(); it != this->tableCards.end(); ++it) {
+        std::cout << "  " << *it << std::endl;
     }
 }
 

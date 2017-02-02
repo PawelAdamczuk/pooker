@@ -51,6 +51,8 @@ private:
 
     void printPlayersInGame();
 
+    void printTableCards();
+
     void addPlayersBet(string playersName, int amount);
 
     int getPlayerBets(string playersName);
@@ -61,7 +63,7 @@ private:
 
     int getPlayerBetToCall(string playersBet);
 
-    void roundOfBetting(CyclicIterator<Player *> it);
+    void roundOfBetting();
 
     std::vector<Hand> getPlayerHands(Player *player);
 public:
