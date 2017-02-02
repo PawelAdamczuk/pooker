@@ -10,18 +10,26 @@
 
 
 int main() {
-    BotPlayer *james = new BotPlayer("James", 100);
-    BotPlayer *kate = new BotPlayer("Kate", 100);
-    BotPlayer *bruce = new BotPlayer("Bruce", 100);
-    HumanPlayer *ian = new HumanPlayer("Ian",100);
+    std::string playerName;
+    int monies;
+    int smallblind;
+    std::cout << "Please input your name: " << std::endl;
+    std::cin >> playerName;
+    std::cout << "Please input the initial amount of money for every player: " << std::endl;
+    std::cin >> monies;
+    std::cout << "Please input the small blind: " << std::endl;
+    std::cin >> smallblind;
+    BotPlayer *james = new BotPlayer("James", monies);
+    BotPlayer *kate = new BotPlayer("Kate", monies);
+    BotPlayer *bruce = new BotPlayer("Bruce", monies);
+    HumanPlayer *human = new HumanPlayer(playerName, monies);
     vector<Player*> players = {
             james,
             kate,
             bruce,
-            ian
+            human
     };
 
-
-    Game g = Game(players, 5);
+    Game g = Game(players, smallblind);
     g.start();
 }
