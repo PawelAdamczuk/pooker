@@ -47,7 +47,7 @@ Hand GameRound::getPlayerHands(Player *player) {
 
     std::sort(result.begin(), result.end());
     std::reverse(result.begin(), result.end());
-    return *result.begin();
+    return *(result.begin());
 }
 
 
@@ -100,14 +100,16 @@ std::vector<Player *> GameRound::start() {
         break;
     }
 
-    for (Player *p : this->players) {
-        Hand hand = getPlayerHands(p);
+    if(players.size()>1) {
+        for (Player *p : this->players) {
+            Hand hand = getPlayerHands(p);
 
-        std::cout << p->getName() << " Cards:";
-        for (Card c: p->getCards()) {
-            std::cout << " " << c;
+            std::cout << p->getName() << " Cards:";
+            for (Card c: p->getCards()) {
+                std::cout << " " << c;
+            }
+            std::cout << " Hand: " << hand << std::endl;
         }
-        std::cout << " Hand: " << hand << std::endl;
     }
 
     return this->getWinners();
