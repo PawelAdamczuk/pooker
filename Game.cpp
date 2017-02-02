@@ -19,8 +19,11 @@ void Game::start() {
         i = (int) ((i % players.size()));
         j = (int) (((i + 1) % players.size()));
 
+
         players[i]->setStatus(smallBlind);
+        std::cout << players[i]->getName() << " will be small blind" << std::endl;
         players[j]->setStatus(bigBlind);
+        std::cout << players[j]->getName() << " will be big blind" << std::endl;
 
         GameRound g = GameRound(players, blind);
 
