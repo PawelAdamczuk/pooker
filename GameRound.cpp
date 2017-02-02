@@ -61,7 +61,7 @@ std::vector<Player *> GameRound::getWinners() {
     winners.push_back(*it);
     it++;
 
-    while (it!= players.end() && !(compareHands(*it, winners.back()))) { //TODO ensure good sorting
+    while (it != players.end() && !(compareHands(*it, winners.back()))) { //TODO ensure good sorting
         winners.push_back(*it);
         it++;
     }
@@ -74,6 +74,10 @@ bool GameRound::shouldFinish() {
 }
 
 std::vector<Player *> GameRound::start() {
+    std::cout << "Shuffling the deck" << endl;
+    deck.shuffle();
+    deck.shuffle();
+
     while (true) {
         this->playPreflop();
 
@@ -94,9 +98,17 @@ std::vector<Player *> GameRound::start() {
         break;
     }
 
-    for (Player* p : this->players) {
+    for (Player *p : this->players) {
         vector<Hand> hands = getPlayerHands(p);
-        std::cout << p->getName() << ": " << hands[0] << std::endl;
+
+        if (hands.size() > 0) {
+            std::cout << p->getName() << ": " << hands[0] << std::endl;
+            for (auto k : hands) {
+                cout << k << endl;
+            }
+        } else {
+            std::cout << p->getName() << ": nothing" << std::endl;
+        }
     }
 
     return this->getWinners();
@@ -302,10 +314,14 @@ void GameRound::addPlayersBet(string playersName, int amount) {
 }
 
 void GameRound::printTableCards() {
-    std::cout <<  "Cards on the table: " << std::endl;
-    for(std::vector<Card>::iterator it = this->tableCards.begin(); it != this->tableCards.end(); ++it) {
+    std::cout << "Cards on the table: " << std::endl;
+    for (std::vector<Card>::iterator it = this->tableCards.begin(); it != this->tableCards.end(); ++it) {
         std::cout << "  " << *it << std::endl;
     }
+}
+
+int GameRound::getPot() {
+    return pot;
 }
 
 

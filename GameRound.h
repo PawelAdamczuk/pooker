@@ -72,6 +72,8 @@ public:
     std::vector<Player*> start();
 
     bool compareHands(Player *first, Player *second);
+
+    int getPot();
 };
 
 #endif //POOKER_ABSTRACTROUND_H

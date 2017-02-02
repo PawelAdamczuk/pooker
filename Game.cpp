@@ -5,62 +5,58 @@
 #include "Game.h"
 #include "GameRound.h"
 
-Game::Game(vector<Player*> playersVector, int smallBlind) {
+Game::Game(vector<Player *> playersVector, int smallBlind) {
     players = playersVector;
     blind = smallBlind;
 }
 
 void Game::start() {
-    players[0]->setStatus(smallBlind);
-    players[1]->setStatus(bigBlind);
-//    while (players.size() > 1) {
-//
-//
-//    }
 
-    GameRound g = GameRound(players, blind);
+    int i = 0;
+    int j;
 
-    vector<Player*> w = g.start();
+    while (players.size() > 1) {
+        i = (int) ((i % players.size()));
+        j = (int) (((i + 1) % players.size()));
 
-    std::cout << "^^^ winners of the round ^^^" << std::endl;
+        players[i]->setStatus(smallBlind);
+        players[j]->setStatus(bigBlind);
 
-//    for (Player* k : w) {
-//        cout << "WON: " << k->getName();
-//    }
+        GameRound g = GameRound(players, blind);
 
-}
+        vector<Player *> w = g.start();
 
-vector<Player*> Game::copyPlayers() {
-    vector<Player*> copy = vector<Player*>();
-    std::copy(players.begin(), players.end(), back_inserter(copy));
-    return copy;
+        std::cout << "^^^ winners of the round ^^^" << std::endl;
+
+        int amount = (int) w.size();
+        int each = g.getPot() / amount;
+        for (Player *k : w) {
+            cout << "Player: " << k->getName() << " gets: " << each << " chips" << endl;
+            k->addMoney(each);
+        }
+
+        this->updateBlindsAndRemove();
+        i++;
+    }
+
 }
 
 void Game::updateBlindsAndRemove() {
+    std::vector<Player *> newPlay = std::vector<Player *>();
 
-//    CyclicIterator<Player> it = CyclicIterator(players);
-//
-//    bool smallFound = false;
-//    bool bigFound = false;
-//
-//    while (true) {
-//        if ((*it).getStatus() == smallBlind) {
-//            smallFound = true;
-//        }
-//
-//        if ((*it).getMoney() < 2 * blind) {
-////            players.erase(it,i)
-//        }
-//        //TODO
-//
-//    }
-//
+    for (auto it = players.begin(); it != players.end(); it++) {
+        if ((*it)->getMoney() < smallBlind) {
+            cout << (*it)->getName() << " will be removed" << endl;
+        } else {
+            newPlay.push_back((*it));
+        }
+    }
 
+    players = newPlay;
 }
 
 Game::~Game() {
-    for (std::vector<Player*>::iterator it = players.begin() ; it != players.end(); ++it)
-    {
+    for (std::vector<Player *>::iterator it = players.begin(); it != players.end(); ++it) {
         delete (*it);
     }
     players.clear();

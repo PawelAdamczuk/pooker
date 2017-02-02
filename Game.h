@@ -21,8 +21,6 @@ public:
 
     void start();
 
-    vector<Player*> copyPlayers();
-
     void updateBlindsAndRemove();
 
 };
