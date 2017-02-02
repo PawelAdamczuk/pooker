@@ -39,6 +39,8 @@ public:
 
     static std::vector<Hand> evaluate(std::vector<Card> &cards);
 
+    bool operator==(const Hand &rhs) const;
+
 };
 
 

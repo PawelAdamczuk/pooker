@@ -23,28 +23,17 @@ void GameRound::burnCard() {
     this->burnedCards.push_back(this->deck.deal());
 }
 
-bool GameRound::compareHands(Player *first, Player *second) {
+bool GameRound::compareHands(Player *first, Player *second) { //true if first precedes second
     std::vector<Hand> firstHands = this->getPlayerHands(first);
     std::vector<Hand> secondHands = this->getPlayerHands(second);
 
     auto f = firstHands.begin();
     auto s = secondHands.begin();
 
-    while (true) {
-        bool firstEnded = f == firstHands.end();
-        bool secondEnded = s == secondHands.end();
-        if (firstEnded && secondEnded) return false;
+    if(*f == *s)
+        return false;
 
-        if (firstEnded) return true;
-
-        if (secondEnded) return true;
-
-        bool handsAreEqual = *f < *s && *s < *f;
-        if (!handsAreEqual) return *f < *s;
-
-        f++;
-        s++;
-    }
+    return !(*f < *s);
 }
 
 std::vector<Hand> GameRound::getPlayerHands(Player *player) {
@@ -53,6 +42,8 @@ std::vector<Hand> GameRound::getPlayerHands(Player *player) {
     std::copy(tableCards.begin(), tableCards.end(), back_inserter(playerCards));
 
     std::vector<Hand> result = Hand::evaluate(playerCards);
+
+    std::sort(result.begin(), result.end());
 
     return result;
 }
@@ -66,11 +57,13 @@ std::vector<Player *> GameRound::getWinners() {
     });
     std::vector<Player *> winners;
 
-    auto it = this->players.end();
-    winners.push_back(*it--);
+    auto it = this->players.begin();
+    winners.push_back(*it);
+    it++;
 
-    while (compareHands(*it, winners.back())) { //TODO ensure good sorting
-        winners.push_back(*it--);
+    while (it!= players.end() && !(compareHands(*it, winners.back()))) { //TODO ensure good sorting
+        winners.push_back(*it);
+        it++;
     }
 
     return winners;
@@ -99,6 +92,11 @@ std::vector<Player *> GameRound::start() {
 
         this->playRiver();
         break;
+    }
+
+    for (Player* p : this->players) {
+        vector<Hand> hands = getPlayerHands(p);
+        std::cout << p->getName() << ": " << hands[0] << std::endl;
     }
 
     return this->getWinners();

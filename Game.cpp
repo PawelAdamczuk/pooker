@@ -22,10 +22,11 @@ void Game::start() {
 
     vector<Player*> w = g.start();
 
-    for (Player* k : w) {
-        cout << "WON: " << k->getName();
-    }
+    std::cout << "^^^ winners of the round ^^^" << std::endl;
 
+//    for (Player* k : w) {
+//        cout << "WON: " << k->getName();
+//    }
 
 }
 

@@ -8,6 +8,7 @@
 //id_card_1 := the hightest card
 bool Hand::CheckHighCard() {
     this->identity_card_1 = this->cards[4];
+    this->identity_card_2 = this->cards[4];
     this->ranking = high_card;
     return true;
 }
@@ -18,21 +19,25 @@ bool Hand::CheckPair() {
 
     if(this->cards[0].getRank() == this->cards[1].getRank()) {
         this->identity_card_1 = this->cards[0];
+        this->identity_card_2 = this->cards[0];
         this->ranking = pair;
         a = true; }
 
     if(this->cards[1].getRank() == this->cards[2].getRank()) {
         this->identity_card_1 = this->cards[1];
+        this->identity_card_2 = this->cards[1];
         this->ranking = pair;
         a = true; }
 
     if(this->cards[2].getRank() == this->cards[3].getRank()) {
         this->identity_card_1 = this->cards[2];
+        this->identity_card_2 = this->cards[2];
         this->ranking = pair;
         a = true; }
 
     if(this->cards[3].getRank() == this->cards[4].getRank()) {
         this->identity_card_1 = this->cards[3];
+        this->identity_card_2 = this->cards[3];
         this->ranking = pair;
         a = true; }
 
@@ -73,18 +78,21 @@ bool Hand::CheckThreeOfAKind() {
     if(this->cards[0].getRank() == this->cards[1].getRank() &&
        this->cards[1].getRank() == this->cards[2].getRank()) {
         this->identity_card_1 = this->cards[0];
+        this->identity_card_2 = this->cards[0];
         this->ranking = three_of_a_kind;
         a = true; }
 
     if(this->cards[1].getRank() == this->cards[2].getRank() &&
        this->cards[2].getRank() == this->cards[3].getRank()) {
         this->identity_card_1 = this->cards[1];
+        this->identity_card_2 = this->cards[1];
         this->ranking = three_of_a_kind;
         a = true; }
 
     if(this->cards[2].getRank() == this->cards[3].getRank() &&
        this->cards[3].getRank() == this->cards[4].getRank()) {
         this->identity_card_1 = this->cards[2];
+        this->identity_card_2 = this->cards[2];
         this->ranking = three_of_a_kind;
         a = true; }
 
@@ -99,6 +107,7 @@ bool Hand::CheckStraight() {
        this->cards[3].getRank() == this->cards[0].getRank() + 3 &&
        this->cards[4].getRank() == this->cards[0].getRank() + 4) {
         this->identity_card_1 = this->cards[0];
+        this->identity_card_2 = this->cards[0];
         this->ranking = straight;
         a = true; }
 
@@ -113,6 +122,7 @@ bool Hand::CheckFlush() {
        this->cards[3].getSuit() == this->cards[0].getSuit() &&
        this->cards[4].getSuit() == this->cards[0].getSuit()) {
         this->identity_card_1 = this->cards[4];
+        this->identity_card_2 = this->cards[4];
         this->ranking = flush;
         a = true; }
 
@@ -183,6 +193,7 @@ bool Hand::CheckStraightFlush() {
 
     if(_flush && _straight) {
         this->identity_card_1 = this->cards[0];
+        this->identity_card_2 = this->cards[0];
         this->ranking = straight_flush;
     }
 
@@ -211,6 +222,7 @@ bool Hand::CheckRoyalFlush() {
 
     if(_flush && _straight && _royal) {
         this->identity_card_1 = this->cards[4];
+        this->identity_card_2 = this->cards[4];
         this->ranking = royal_flush;
     }
 
@@ -375,4 +387,8 @@ std::vector<Hand> Hand::evaluate(std::vector<Card> &cards) {
         }
     }
     return hands;
+}
+
+bool Hand::operator==(const Hand &rhs) const {
+    return this->identity_card_1 == rhs.identity_card_1 && this->identity_card_2 == rhs.identity_card_2 && this->ranking == rhs.ranking;
 }
