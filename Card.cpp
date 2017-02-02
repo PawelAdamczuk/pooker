@@ -6,12 +6,12 @@
 
 std::ostream &operator<<(std::ostream &stream, const Card &card) {
     //http://stackoverflow.com/questions/3342726/c-print-out-enum-value-as-text
-    std::string Ranks[] = {"incorrect_rank", "incorrect_rank", "two", "three", "four", "five", "six", "seven",
-                    "eight", "nine", "ten", "jack", "queen", "king", "ace"};
+    std::string Ranks[] = {"incorrect_rank", "incorrect_rank", "2", "3", "4", "5", "6", "7",
+                           "8", "9", "10", "J", "Q", "K", "A"};
 
-    std::string Suits[] = {"spades", "hearts", "diamonds", "clubs"};
+    std::string Suits[] = {"♠", "♥", "♦", "♣"};
 
-    stream << Ranks[card.rank] << " of " << Suits[card.suit];
+    stream << "[" << Ranks[card.rank] << Suits[card.suit] << "]";
     return stream;
 }
 
@@ -34,6 +34,7 @@ ranks_t Card::getRank() const {
 bool Card::operator<(const Card &b) const {
     return this->rank < b.rank;
 }
+
 //only compares ranks
 bool Card::operator>(const Card &b) const {
     return this->rank > b.rank;
@@ -41,14 +42,14 @@ bool Card::operator>(const Card &b) const {
 
 //takes the suit into account (used in sorting that needs to be deterministic)
 short Card::compare(const Card &a) {
-    if(a > *this)
+    if (a > *this)
         return 1;
     if (a < *this)
         return -1;
 
-    if(a.getSuit() > this->getSuit())
+    if (a.getSuit() > this->getSuit())
         return 1;
-    if(a.getSuit() < this->getSuit())
+    if (a.getSuit() < this->getSuit())
         return -1;
 
     return 0;

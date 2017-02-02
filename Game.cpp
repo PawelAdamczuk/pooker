@@ -37,6 +37,7 @@ void Game::start() {
 
         this->updateBlindsAndRemove();
         i++;
+        std::cout << std::endl;
     }
 
     std::cout << "*** The winner is " << players[0]->getName() << " won: " << players[0]->getMoney() << " ***"

@@ -24,19 +24,16 @@ void GameRound::burnCard() {
 }
 
 bool GameRound::compareHands(Player *first, Player *second) { //true if first precedes second
-    std::vector<Hand> firstHands = this->getPlayerHands(first);
-    std::vector<Hand> secondHands = this->getPlayerHands(second);
+    Hand f = this->getPlayerHands(first);
+    Hand s = this->getPlayerHands(second);
 
-    auto f = firstHands.begin();
-    auto s = secondHands.begin();
-
-    if (*f == *s)
+    if (f == s)
         return false;
 
-    return !(*f < *s);
+    return !(f < s);
 }
 
-std::vector<Hand> GameRound::getPlayerHands(Player *player) {
+Hand GameRound::getPlayerHands(Player *player) {
     std::vector<Card> playerCards = std::vector<Card>();
 
     for (Card c: tableCards) {
@@ -49,8 +46,8 @@ std::vector<Hand> GameRound::getPlayerHands(Player *player) {
     std::vector<Hand> result = Hand::evaluate(playerCards);
 
     std::sort(result.begin(), result.end());
-
-    return result;
+    std::reverse(result.begin(), result.end());
+    return *result.begin();
 }
 
 
@@ -104,13 +101,13 @@ std::vector<Player *> GameRound::start() {
     }
 
     for (Player *p : this->players) {
-        vector<Hand> hands = getPlayerHands(p);
+        Hand hand = getPlayerHands(p);
 
-        if (hands.size() > 0) {
-            std::cout << p->getName() << ": " << hands[0] << std::endl;
-        } else {
-            std::cout << p->getName() << ": nothing" << std::endl;
+        std::cout << p->getName() << " Cards:";
+        for (Card c: p->getCards()) {
+            std::cout << " " << c;
         }
+        std::cout << " Hand: " << hand << std::endl;
     }
 
     return this->getWinners();

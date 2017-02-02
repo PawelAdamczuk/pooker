@@ -65,7 +65,7 @@ private:
 
     void roundOfBetting();
 
-    std::vector<Hand> getPlayerHands(Player *player);
+    Hand getPlayerHands(Player *player);
 public:
     GameRound(std::vector<Player*> playersVector, int smallBlind);
 
